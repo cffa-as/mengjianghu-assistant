@@ -33,8 +33,9 @@ jobs:
       - name: Build web app
         run: npm run build
 
-      - name: Add Android platform
-        run: npx cap add android
+      # 移除添加Android平台的步骤，因为平台已存在于仓库中
+      # - name: Add Android platform
+      #   run: npx cap add android
 
       - name: Sync Capacitor project
         run: npx cap sync android
