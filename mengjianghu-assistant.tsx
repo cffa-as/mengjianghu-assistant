@@ -40,6 +40,8 @@ import {
   Plus,
   Pencil,
   Trash2,
+  Sun,
+  Moon,
 } from "lucide-react"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -77,7 +79,7 @@ type Command = {
 }
 
 // 底部导航组件
-function BottomNavigation({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) {
+function BottomNavigation({ activeTab, setActiveTab, theme }: { activeTab: string; setActiveTab: (tab: string) => void; theme: "light" | "dark" }) {
   const tabs = [
     { id: "commands", label: "指令", icon: BookOpen },
     { id: "dreamland", label: "梦墟", icon: Map },
@@ -87,8 +89,12 @@ function BottomNavigation({ activeTab, setActiveTab }: { activeTab: string; setA
   ]
 
   return (
-    <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+10px)] left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-2 z-50 rounded-xl mx-4 shadow-lg">
-      <div className="flex justify-around max-w-md mx-auto">
+    <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+20px)] left-0 right-0 px-4 py-2 z-50">
+      <div className={`flex justify-around max-w-md mx-auto ${
+        theme === "dark" 
+          ? "bg-black/30 backdrop-blur-md border border-white/10" 
+          : "bg-white/90 backdrop-blur-md border border-gray-200"
+        } rounded-xl shadow-xl`}>
         {tabs.map((tab) => {
           const Icon = tab.icon
           return (
@@ -96,7 +102,13 @@ function BottomNavigation({ activeTab, setActiveTab }: { activeTab: string; setA
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
-                activeTab === tab.id ? "text-blue-600 bg-blue-50" : "text-gray-600 hover:text-gray-800"
+                activeTab === tab.id 
+                  ? theme === "dark" 
+                    ? "text-blue-400 bg-white/10" 
+                    : "text-blue-600 bg-blue-50"
+                  : theme === "dark"
+                    ? "text-gray-400 hover:text-gray-300" 
+                    : "text-gray-600 hover:text-gray-800"
               }`}
             >
               <Icon className="w-5 h-5" />
@@ -110,7 +122,7 @@ function BottomNavigation({ activeTab, setActiveTab }: { activeTab: string; setA
 }
 
 // 指令页面组件
-function CommandsPage() {
+function CommandsPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
   const [searchTerm, setSearchTerm] = useState("")
   const [copiedCommand, setCopiedCommand] = useState("")
   // 使用数组而不是Set来跟踪展开的指令ID
@@ -211,11 +223,13 @@ function CommandsPage() {
     <div className="p-4">
       <div className="max-w-md mx-auto space-y-4 pb-28">
         {/* 提示信息 */}
-        <Card>
+        <Card className={`${theme === "dark" 
+          ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg text-white" 
+          : "bg-white border-gray-200 shadow"}`}>
           <CardContent className="pt-6">
             <div className="flex items-start gap-2">
-              <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-gray-600">
+              <Info className={`w-4 h-4 ${theme === "dark" ? "text-blue-400" : "text-blue-600"} mt-0.5 flex-shrink-0`} />
+              <div className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
                 <p>您可以在这里管理自己的游戏指令，添加常用指令方便快速复制。点击指令名称可展开/折叠内容。</p>
               </div>
             </div>
@@ -223,17 +237,19 @@ function CommandsPage() {
         </Card>
 
         {/* 完整指令文档链接 */}
-        <Card>
+        <Card className={`${theme === "dark" 
+          ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg text-white" 
+          : "bg-white border-gray-200 shadow"}`}>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-sm">
-              <BookOpen className="w-4 h-4 text-blue-600" />
+            <CardTitle className={`flex items-center gap-2 ${theme === "dark" ? "text-white" : "text-gray-800"} text-sm`}>
+              <BookOpen className={`w-4 h-4 ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`} />
               参考指令文档
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Button
               size="sm"
-              className="w-full"
+              className={`w-full ${theme === "dark" ? "bg-blue-700 hover:bg-blue-800" : "bg-blue-600 hover:bg-blue-700"}`}
               onClick={() => window.open("https://scnuju7foaj4.feishu.cn/wiki/CeNDwyh6kioR1rkG98ccFMR0nef", "_blank")}
             >
               <ExternalLink className="w-4 h-4 mr-2" />
@@ -250,10 +266,10 @@ function CommandsPage() {
               placeholder="搜索指令..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
+              className={`pl-10 ${theme === "dark" ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-200 text-gray-800"}`}
             />
           </div>
-          <Button onClick={() => setIsAddingCommand(true)} size="icon" variant="outline">
+          <Button onClick={() => setIsAddingCommand(true)} size="icon" variant="outline" className={`${theme === "dark" ? "border-white/20 bg-black/30 text-white hover:bg-white/10" : "border-gray-200 bg-white/80 text-gray-800 hover:bg-gray-100"}`}>
             <Plus className="h-4 w-4" />
           </Button>
         </div>
@@ -261,21 +277,21 @@ function CommandsPage() {
         {/* 指令列表 */}
         <div className="space-y-3">
           {filteredCommands.map((cmd) => (
-            <Card key={cmd.id}>
+            <Card key={cmd.id} className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
               <CardContent className="pt-4">
                 <div className="space-y-3">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div 
-                        className="flex items-center gap-2 cursor-pointer hover:text-blue-600"
+                        className="flex items-center gap-2 cursor-pointer hover:text-blue-400"
                         onClick={() => toggleCommandExpand(cmd.id)}
                       >
                         {isCommandExpanded(cmd.id) ? (
-                          <ChevronDown className="w-4 h-4 flex-shrink-0 text-blue-600" />
+                          <ChevronDown className="w-4 h-4 flex-shrink-0 text-blue-400" />
                         ) : (
-                          <ChevronRight className="w-4 h-4 flex-shrink-0" />
+                          <ChevronRight className="w-4 h-4 flex-shrink-0 text-gray-400" />
                         )}
-                        <span className="font-medium text-sm">{cmd.name}</span>
+                        <span className={`font-medium text-sm ${theme === "dark" ? "text-white" : "text-gray-800"}`}>{cmd.name}</span>
                       </div>
                     </div>
                     <div className="flex gap-2">
@@ -283,7 +299,7 @@ function CommandsPage() {
                         size="sm"
                         variant="ghost"
                         onClick={() => setEditingCommand(cmd)}
-                        className="h-8 w-8 p-0"
+                        className={`h-8 w-8 p-0 ${theme === "dark" ? "text-gray-300 hover:text-white hover:bg-white/10" : "text-gray-300 hover:text-gray-800 hover:bg-gray-100"}`}
                       >
                         <Pencil className="w-3 h-3" />
                       </Button>
@@ -291,10 +307,10 @@ function CommandsPage() {
                         size="sm"
                         variant="ghost"
                         onClick={() => copyCommand(cmd.command)}
-                        className="h-8 w-8 p-0"
+                        className={`h-8 w-8 p-0 ${theme === "dark" ? "text-gray-300 hover:text-white hover:bg-white/10" : "text-gray-300 hover:text-gray-800 hover:bg-gray-100"}`}
                       >
                         {copiedCommand === cmd.command ? (
-                          <Check className="w-3 h-3 text-green-600" />
+                          <Check className="w-3 h-3 text-green-500" />
                         ) : (
                           <Copy className="w-3 h-3" />
                         )}
@@ -303,14 +319,14 @@ function CommandsPage() {
                         size="sm"
                         variant="ghost"
                         onClick={() => deleteCommand(cmd.id)}
-                        className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                        className={`h-8 w-8 p-0 ${theme === "dark" ? "text-red-400 hover:text-red-300 hover:bg-white/10" : "text-red-400 hover:text-red-300 hover:bg-gray-100"}`}
                       >
                         <Trash2 className="w-3 h-3" />
                       </Button>
                     </div>
                   </div>
                   {isCommandExpanded(cmd.id) && (
-                    <div className="bg-black text-green-400 text-xs p-2 rounded font-mono whitespace-pre-wrap">{cmd.command}</div>
+                    <div className={`${theme === "dark" ? "bg-gray-900 text-green-500 text-xs p-2 rounded font-mono whitespace-pre-wrap border border-gray-800" : "bg-gray-100 text-green-600 text-xs p-2 rounded font-mono whitespace-pre-wrap border border-gray-200"}`}>{cmd.command}</div>
                   )}
                 </div>
               </CardContent>
@@ -319,8 +335,8 @@ function CommandsPage() {
         </div>
 
         {filteredCommands.length === 0 && (
-          <Card>
-            <CardContent className="pt-6 text-center text-gray-500">
+          <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
+            <CardContent className="pt-6 text-center text-gray-400">
               <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p>未找到相关指令</p>
             </CardContent>
@@ -329,64 +345,66 @@ function CommandsPage() {
 
         {/* 添加指令对话框 */}
         <Dialog open={isAddingCommand} onOpenChange={setIsAddingCommand}>
-          <DialogContent>
+          <DialogContent className={`${theme === "dark" ? "bg-gray-900 text-white border-gray-700" : "bg-white border-gray-200 text-gray-800"}`}>
             <DialogHeader>
-              <DialogTitle>添加新指令</DialogTitle>
+              <DialogTitle className={`${theme === "dark" ? "text-white" : "text-gray-800"}`}>添加新指令</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>指令名称</Label>
+                <Label className={`${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>指令名称</Label>
                 <Input
                   value={newCommand.name}
                   onChange={(e) => setNewCommand({ ...newCommand, name: e.target.value })}
                   placeholder="例如：查看背包"
+                  className={`${theme === "dark" ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-200 text-gray-800"}`}
                 />
               </div>
               <div className="space-y-2">
-                <Label>指令内容</Label>
+                <Label className={`${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>指令内容</Label>
                 <Textarea
                   value={newCommand.command}
                   onChange={(e) => setNewCommand({ ...newCommand, command: e.target.value })}
                   placeholder="例如：i"
-                  className="min-h-[200px] font-mono"
+                  className={`${theme === "dark" ? "min-h-[200px] font-mono bg-gray-800 border-gray-700 text-white" : "min-h-[200px] font-mono bg-white border-gray-200 text-gray-800"}`}
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAddingCommand(false)}>取消</Button>
-              <Button onClick={addCommand}>添加</Button>
+              <Button variant="outline" onClick={() => setIsAddingCommand(false)} className={`${theme === "dark" ? "border-gray-700 text-gray-300 hover:bg-gray-800" : "border-gray-700 text-gray-600 hover:bg-gray-100"}`}>取消</Button>
+              <Button onClick={addCommand} className={`${theme === "dark" ? "bg-blue-700 hover:bg-blue-800" : "bg-blue-600 hover:bg-blue-700"}`}>添加</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
 
         {/* 编辑指令对话框 */}
         <Dialog open={!!editingCommand} onOpenChange={(open) => !open && setEditingCommand(null)}>
-          <DialogContent>
+          <DialogContent className={`${theme === "dark" ? "bg-gray-900 text-white border-gray-700" : "bg-white border-gray-200 text-gray-800"}`}>
             <DialogHeader>
-              <DialogTitle>编辑指令</DialogTitle>
+              <DialogTitle className={`${theme === "dark" ? "text-white" : "text-gray-800"}`}>编辑指令</DialogTitle>
             </DialogHeader>
             {editingCommand && (
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label>指令名称</Label>
+                  <Label className={`${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>指令名称</Label>
                   <Input
                     value={editingCommand.name}
                     onChange={(e) => setEditingCommand({ ...editingCommand, name: e.target.value })}
+                    className={`${theme === "dark" ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-200 text-gray-800"}`}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>指令内容</Label>
+                  <Label className={`${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>指令内容</Label>
                   <Textarea
                     value={editingCommand.command}
                     onChange={(e) => setEditingCommand({ ...editingCommand, command: e.target.value })}
-                    className="min-h-[200px] font-mono"
+                    className={`${theme === "dark" ? "min-h-[200px] font-mono bg-gray-800 border-gray-700 text-white" : "min-h-[200px] font-mono bg-white border-gray-200 text-gray-800"}`}
                   />
                 </div>
               </div>
             )}
             <DialogFooter>
-              <Button variant="outline" onClick={() => setEditingCommand(null)}>取消</Button>
-              <Button onClick={() => editingCommand && updateCommand(editingCommand)}>保存</Button>
+              <Button variant="outline" onClick={() => setEditingCommand(null)} className={`${theme === "dark" ? "border-gray-700 text-gray-300 hover:bg-gray-800" : "border-gray-700 text-gray-600 hover:bg-gray-100"}`}>取消</Button>
+              <Button onClick={() => editingCommand && updateCommand(editingCommand)} className={`${theme === "dark" ? "bg-blue-700 hover:bg-blue-800" : "bg-blue-600 hover:bg-blue-700"}`}>保存</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -396,7 +414,7 @@ function CommandsPage() {
 }
 
 // 梦墟导航组件
-function DreamlandPage() {
+function DreamlandPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
   const locations = [
     "梦墟入口",
     "梦境小径",
@@ -510,15 +528,15 @@ function DreamlandPage() {
   return (
     <div className="p-4">
       <div className="max-w-md mx-auto space-y-4 pb-28">
-        <Card>
+        <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-purple-600" />
+            <CardTitle className={`flex items-center gap-2 ${theme === "dark" ? "text-white" : "text-gray-800"} text-sm`}>
+              <MapPin className={`w-5 h-5 ${theme === "dark" ? "text-purple-600" : "text-blue-600"}`} />
               梦墟地图
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="bg-gray-50 rounded-lg p-2">
+            <div className={`${theme === "dark" ? "bg-gray-50" : "bg-gray-100"} rounded-lg p-2`}>
               <img
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/3f13588ccba1187092eb17fb4d3507d2-9uDPj6dnM6XGqscpzdx8SOB3hznPiy.png"
                 alt="梦墟地图"
@@ -528,19 +546,19 @@ function DreamlandPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Navigation className="w-5 h-5 text-blue-600" />
+            <CardTitle className={`flex items-center gap-2 ${theme === "dark" ? "text-white" : "text-gray-800"} text-sm`}>
+              <Navigation className={`w-5 h-5 ${theme === "dark" ? "text-blue-600" : "text-blue-600"}`} />
               路径规划
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">起点</label>
+              <label className={`${theme === "dark" ? "text-sm font-medium text-white" : "text-sm font-medium text-gray-800"}`}>起点</label>
               <Popover open={openStart} onOpenChange={setOpenStart}>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between bg-transparent">
+                  <Button variant="outline" className={`${theme === "dark" ? "w-full justify-between bg-transparent" : "w-full justify-between bg-transparent"}`}>
                     {startLocation || "选择起点..."}
                   </Button>
                 </PopoverTrigger>
@@ -570,10 +588,10 @@ function DreamlandPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">终点</label>
+              <label className={`${theme === "dark" ? "text-sm font-medium text-white" : "text-sm font-medium text-gray-800"}`}>终点</label>
               <Popover open={openEnd} onOpenChange={setOpenEnd}>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between bg-transparent">
+                  <Button variant="outline" className={`${theme === "dark" ? "w-full justify-between bg-transparent" : "w-full justify-between bg-transparent"}`}>
                     {endLocation || "选择终点..."}
                   </Button>
                 </PopoverTrigger>
@@ -614,7 +632,7 @@ function DreamlandPage() {
 
             {path.length > 0 && (
               <div className="space-y-2">
-                <label className="text-sm font-medium">最短路径 ({path.length - 1} 步)</label>
+                <label className={`${theme === "dark" ? "text-sm font-medium text-white" : "text-sm font-medium text-gray-800"}`}>最短路径 ({path.length - 1} 步)</label>
                 <div className="space-y-1">
                   {path.map((location, index) => (
                     <div key={index} className="flex items-center gap-2">
@@ -638,7 +656,7 @@ function DreamlandPage() {
 }
 
 // 题库页面组件
-function QuestionsPage() {
+function QuestionsPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
   const [searchTerm, setSearchTerm] = useState("")
   const [questionsData, setQuestionsData] = useState<Array<[string, string]>>([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -702,10 +720,10 @@ function QuestionsPage() {
     return (
       <div className="p-4">
         <div className="max-w-md mx-auto pb-28">
-          <Card>
+          <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
             <CardContent className="pt-6 text-center">
               <div className="animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-2"></div>
-              <p className="text-gray-500">加载题库中...</p>
+              <p className={`${theme === "dark" ? "text-gray-500" : "text-gray-500"}`}>加载题库中...</p>
             </CardContent>
           </Card>
         </div>
@@ -722,11 +740,11 @@ function QuestionsPage() {
             placeholder="搜索题库..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className={`pl-10 ${theme === "dark" ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-200 text-gray-800"}`}
           />
         </div>
 
-        <Card>
+        <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
           <CardContent className="pt-6">
             <div className="flex justify-between items-center">
               <div className="text-center">
@@ -747,7 +765,7 @@ function QuestionsPage() {
 
         <div className="space-y-3">
           {currentQuestions.map(([question, answer], index) => (
-            <Card key={startIndex + index}>
+            <Card key={startIndex + index} className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
               <CardContent className="pt-4">
                 <div className="space-y-3">
                   <div className="flex items-start gap-2">
@@ -764,7 +782,7 @@ function QuestionsPage() {
         </div>
 
         {totalPages > 1 && (
-          <Card>
+          <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <Button
@@ -816,7 +834,7 @@ function QuestionsPage() {
         )}
 
         {filteredQuestions.length === 0 && !loading && (
-          <Card>
+          <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
             <CardContent className="pt-6 text-center text-gray-500">
               <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p>未找到相关题目</p>
@@ -829,7 +847,7 @@ function QuestionsPage() {
 }
 
 // 常用页面组件
-function CommonPage() {
+function CommonPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
   const tables = {
     breakthrough: [
       { stage: "一段", requirement: "先天1500", materials: "大道10 天道10" },
@@ -892,9 +910,9 @@ function CommonPage() {
           </TabsList>
 
           <TabsContent value="breakthrough" className="space-y-3">
-            <Card>
+            <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
               <CardHeader>
-                <CardTitle className="text-sm">挣脱要求表</CardTitle>
+                <CardTitle className={`${theme === "dark" ? "text-white" : "text-gray-800"} text-sm`}>挣脱要求表</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
@@ -915,9 +933,9 @@ function CommonPage() {
           </TabsContent>
 
           <TabsContent value="reincarnation" className="space-y-3">
-            <Card>
+            <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
               <CardHeader>
-                <CardTitle className="text-sm">转世要求表</CardTitle>
+                <CardTitle className={`${theme === "dark" ? "text-white" : "text-gray-800"} text-sm`}>转世要求表</CardTitle>
                 <p className="text-xs text-gray-600">
                   注意：宗武+50等级，武修+20等级要求。转世后宗武全无，特殊技能、基础技能会掉等级273，武修等级也会掉。
                 </p>
@@ -945,9 +963,9 @@ function CommonPage() {
           </TabsContent>
 
           <TabsContent value="supreme" className="space-y-3">
-            <Card>
+            <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
               <CardHeader>
-                <CardTitle className="text-sm">至尊破碎九段要求</CardTitle>
+                <CardTitle className={`${theme === "dark" ? "text-white" : "text-gray-800"} text-sm`}>至尊破碎九段要求</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
@@ -974,7 +992,7 @@ function CommonPage() {
 }
 
 // 礼包页面组件
-function GiftsPage() {
+function GiftsPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
   const [searchTerm, setSearchTerm] = useState("")
   const [priceFilter, setPriceFilter] = useState("all")
   const [limitedFilter, setLimitedFilter] = useState("all")
@@ -1120,10 +1138,10 @@ function GiftsPage() {
     return (
       <div className="p-4">
         <div className="max-w-md mx-auto pb-28">
-          <Card>
+          <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
             <CardContent className="pt-6 text-center">
               <div className="animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-2"></div>
-              <p className="text-gray-500">加载礼包数据中...</p>
+              <p className={`${theme === "dark" ? "text-gray-500" : "text-gray-500"}`}>加载礼包数据中...</p>
             </CardContent>
           </Card>
         </div>
@@ -1141,12 +1159,12 @@ function GiftsPage() {
             placeholder="搜索礼包..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className={`pl-10 ${theme === "dark" ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-200 text-gray-800"}`}
           />
         </div>
 
         {/* 提示信息 */}
-        <Card>
+        <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
           <CardContent className="pt-6">
             <div className="flex items-start gap-2">
               <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -1209,7 +1227,7 @@ function GiftsPage() {
         </div>
 
         {/* 统计信息 */}
-        <Card>
+        <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
           <CardContent className="pt-6">
             <div className="flex justify-between items-center">
               <div className="text-center">
@@ -1233,7 +1251,7 @@ function GiftsPage() {
         {/* 礼包列表 */}
         <div className="space-y-3">
           {filteredGifts.map((gift, index) => (
-            <Card key={index}>
+            <Card key={index} className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
               <CardContent className="pt-4">
                 <div className="space-y-3">
                   <div className="flex items-start justify-between">
@@ -1269,7 +1287,7 @@ function GiftsPage() {
         </div>
 
         {filteredGifts.length === 0 && (
-          <Card>
+          <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
             <CardContent className="pt-6 text-center text-gray-500">
               <Gift className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p>未找到相关礼包</p>
@@ -1286,44 +1304,72 @@ function GiftsPage() {
 export default function MengjianghuAssistant() {
   const [activeTab, setActiveTab] = useState("commands")
   const [currentQuote, setCurrentQuote] = useState(inspirationalQuotes[0])
+  const [theme, setTheme] = useState<"light" | "dark">("dark")
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * inspirationalQuotes.length)
     setCurrentQuote(inspirationalQuotes[randomIndex])
   }, [])
 
+  const toggleTheme = () => {
+    setTheme(prevTheme => prevTheme === "light" ? "dark" : "light")
+  }
+
   const renderContent = () => {
     switch (activeTab) {
       case "commands":
-        return <CommandsPage />
+        return <CommandsPage theme={theme} />
       case "dreamland":
-        return <DreamlandPage />
+        return <DreamlandPage theme={theme} />
       case "questions":
-        return <QuestionsPage />
+        return <QuestionsPage theme={theme} />
       case "common":
-        return <CommonPage />
+        return <CommonPage theme={theme} />
       case "gifts":
-        return <GiftsPage />
+        return <GiftsPage theme={theme} />
       default:
-        return <CommandsPage />
+        return <CommandsPage theme={theme} />
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className={`min-h-screen flex flex-col ${
+      theme === "dark" 
+        ? "bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900" 
+        : "bg-gradient-to-br from-blue-50 via-white to-blue-50"
+    }`}>
       {/* 添加顶部安全区域 */}
-      <div className="h-[env(safe-area-inset-top)] bg-white"></div>
+      <div className={`h-[env(safe-area-inset-top)] ${
+        theme === "dark" ? "bg-gradient-to-r from-gray-900 to-gray-800" : "bg-white"
+      }`}></div>
       
-      <div className="bg-white shadow-sm border-b px-4 py-3 sticky top-[env(safe-area-inset-top)] z-50">
-        <div className="max-w-md mx-auto">
-          <h1 className="text-lg font-bold text-center text-gray-800 mb-1">梦江湖助手</h1>
-          <div className="text-xs text-gray-500 text-center mb-2">2025年7月</div>
-          <div className="text-center">
-            <div className="text-xs text-gray-500 flex items-center justify-center gap-1">
-              <Quote className="w-3 h-3" />
-              <span className="italic">{currentQuote}</span>
+      <div className={`${
+        theme === "dark" 
+          ? "bg-black/20 backdrop-blur-md border-b border-white/10" 
+          : "bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm"
+        } px-4 py-3 sticky top-[env(safe-area-inset-top)] z-50`}
+      >
+        <div className="max-w-md mx-auto flex items-center justify-between">
+          <div className="flex-1">
+            <h1 className={`text-lg font-bold text-center ${theme === "dark" ? "text-white" : "text-gray-800"} mb-1`}>梦江湖助手</h1>
+            <div className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-500"} text-center mb-2`}>2025年7月</div>
+            <div className="text-center">
+              <div className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-500"} flex items-center justify-center gap-1`}>
+                <Quote className={`w-3 h-3 ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`} />
+                <span className="italic">{currentQuote}</span>
+              </div>
             </div>
           </div>
+          <Button 
+            onClick={toggleTheme} 
+            size="icon" 
+            variant="ghost" 
+            className={`h-10 w-10 rounded-full absolute right-4 top-3 ${
+              theme === "dark" ? "text-yellow-200 hover:text-yellow-100 hover:bg-gray-800" : "text-blue-600 hover:bg-blue-100"
+            }`}
+          >
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
         </div>
       </div>
 
@@ -1331,7 +1377,7 @@ export default function MengjianghuAssistant() {
         {renderContent()}
       </div>
 
-      <BottomNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+      <BottomNavigation activeTab={activeTab} setActiveTab={setActiveTab} theme={theme} />
     </div>
   )
 }
