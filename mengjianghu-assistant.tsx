@@ -201,7 +201,7 @@ function CommandsPage() {
 
   return (
     <div className="p-4">
-      <div className="max-w-md mx-auto space-y-4 pb-20">
+      <div className="max-w-md mx-auto space-y-4 pb-24">
         {/* 提示信息 */}
         <Card>
           <CardContent className="pt-6">
@@ -501,7 +501,7 @@ function DreamlandPage() {
 
   return (
     <div className="p-4">
-      <div className="max-w-md mx-auto space-y-4 pb-20">
+      <div className="max-w-md mx-auto space-y-4 pb-24">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -693,7 +693,7 @@ function QuestionsPage() {
   if (loading) {
     return (
       <div className="p-4">
-        <div className="max-w-md mx-auto pb-20">
+        <div className="max-w-md mx-auto pb-24">
           <Card>
             <CardContent className="pt-6 text-center">
               <div className="animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-2"></div>
@@ -707,7 +707,7 @@ function QuestionsPage() {
 
   return (
     <div className="p-4">
-      <div className="max-w-md mx-auto space-y-4 pb-20">
+      <div className="max-w-md mx-auto space-y-4 pb-24">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
@@ -764,21 +764,21 @@ function QuestionsPage() {
                   size="sm"
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
+                  className="h-7 px-2"
                 >
-                  <ChevronLeft className="w-4 h-4 mr-1" />
-                  上一页
+                  <ChevronLeft className="w-4 h-4" />
                 </Button>
-                <div className="flex items-center gap-2">
-                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
                     let pageNum
-                    if (totalPages <= 5) {
+                    if (totalPages <= 3) {
                       pageNum = i + 1
-                    } else if (currentPage <= 3) {
+                    } else if (currentPage <= 2) {
                       pageNum = i + 1
-                    } else if (currentPage >= totalPages - 2) {
-                      pageNum = totalPages - 4 + i
+                    } else if (currentPage >= totalPages - 1) {
+                      pageNum = totalPages - 2 + i
                     } else {
-                      pageNum = currentPage - 2 + i
+                      pageNum = currentPage - 1 + i
                     }
                     return (
                       <Button
@@ -786,7 +786,7 @@ function QuestionsPage() {
                         variant={currentPage === pageNum ? "default" : "outline"}
                         size="sm"
                         onClick={() => setCurrentPage(pageNum)}
-                        className="w-8 h-8 p-0 text-xs"
+                        className="w-7 h-7 p-0 text-xs"
                       >
                         {pageNum}
                       </Button>
@@ -798,9 +798,9 @@ function QuestionsPage() {
                   size="sm"
                   onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                   disabled={currentPage === totalPages}
+                  className="h-7 px-2"
                 >
-                  下一页
-                  <ChevronRight className="w-4 h-4 ml-1" />
+                  <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
             </CardContent>
@@ -875,7 +875,7 @@ function CommonPage() {
 
   return (
     <div className="p-4">
-      <div className="max-w-md mx-auto space-y-4 pb-20">
+      <div className="max-w-md mx-auto space-y-4 pb-24">
         <Tabs defaultValue="breakthrough" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="breakthrough">挣脱要求</TabsTrigger>
@@ -970,6 +970,7 @@ function GiftsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [priceFilter, setPriceFilter] = useState("all")
   const [limitedFilter, setLimitedFilter] = useState("all")
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false) // 新增：只显示收藏
   const [favorites, setFavorites] = useState<string[]>([])
   const [giftPackages, setGiftPackages] = useState<
     Array<{
@@ -1077,6 +1078,12 @@ function GiftsPage() {
   const filteredGifts = useMemo(() => {
     let filtered = giftPackages
 
+    // 首先应用"只显示收藏"筛选
+    if (showFavoritesOnly) {
+      filtered = filtered.filter(gift => favorites.includes(gift.name))
+    }
+
+    // 应用搜索筛选
     if (searchTerm) {
       filtered = filtered.filter(
         (gift) =>
@@ -1085,24 +1092,26 @@ function GiftsPage() {
       )
     }
 
+    // 应用价格筛选
     if (priceFilter && priceFilter !== "all") {
       filtered = filtered.filter((gift) => gift.price.toString() === priceFilter)
     }
 
+    // 应用限定状态筛选
     if (limitedFilter && limitedFilter !== "all") {
       const isLimited = limitedFilter === "limited"
       filtered = filtered.filter((gift) => gift.isLimited === isLimited)
     }
 
     return filtered
-  }, [searchTerm, priceFilter, limitedFilter, giftPackages])
+  }, [searchTerm, priceFilter, limitedFilter, giftPackages, favorites, showFavoritesOnly])
 
   const priceOptions = [...new Set(giftPackages.map((gift) => gift.price))].sort((a, b) => a - b)
 
   if (loading) {
     return (
       <div className="p-4">
-        <div className="max-w-md mx-auto pb-20">
+        <div className="max-w-md mx-auto pb-24">
           <Card>
             <CardContent className="pt-6 text-center">
               <div className="animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-2"></div>
@@ -1116,7 +1125,7 @@ function GiftsPage() {
 
   return (
     <div className="p-4">
-      <div className="max-w-md mx-auto space-y-4 pb-20">
+      <div className="max-w-md mx-auto space-y-4 pb-24">
         {/* 搜索框 */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -1146,9 +1155,9 @@ function GiftsPage() {
         </Card>
 
         {/* 筛选器 */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Select value={priceFilter} onValueChange={setPriceFilter}>
-            <SelectTrigger className="flex-1">
+            <SelectTrigger className="flex-1 min-w-[120px]">
               <SelectValue placeholder="赞助金额" />
             </SelectTrigger>
             <SelectContent>
@@ -1162,7 +1171,7 @@ function GiftsPage() {
           </Select>
 
           <Select value={limitedFilter} onValueChange={setLimitedFilter}>
-            <SelectTrigger className="flex-1">
+            <SelectTrigger className="flex-1 min-w-[120px]">
               <SelectValue placeholder="限定状态" />
             </SelectTrigger>
             <SelectContent>
@@ -1171,6 +1180,24 @@ function GiftsPage() {
               <SelectItem value="unlimited">非限定</SelectItem>
             </SelectContent>
           </Select>
+          
+          {/* 收藏筛选开关 */}
+          <Button 
+            variant={showFavoritesOnly ? "default" : "outline"}
+            size="sm" 
+            onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+            className="flex-1 min-w-[120px]"
+          >
+            {showFavoritesOnly ? (
+              <>
+                <Star className="w-4 h-4 mr-2 fill-current" /> 收藏礼包
+              </>
+            ) : (
+              <>
+                <StarOff className="w-4 h-4 mr-2" /> 全部礼包
+              </>
+            )}
+          </Button>
         </div>
 
         {/* 统计信息 */}
@@ -1276,7 +1303,10 @@ export default function MengjianghuAssistant() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <div className="bg-white shadow-sm border-b px-4 py-3 sticky top-0 z-50">
+      {/* 添加顶部安全区域 */}
+      <div className="h-[env(safe-area-inset-top)] bg-white"></div>
+      
+      <div className="bg-white shadow-sm border-b px-4 py-3 sticky top-[env(safe-area-inset-top)] z-50">
         <div className="max-w-md mx-auto">
           <h1 className="text-lg font-bold text-center text-gray-800 mb-1">梦江湖助手</h1>
           <div className="text-xs text-gray-500 text-center mb-2">2025年7月</div>
