@@ -772,9 +772,9 @@ function QuestionsPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
                     <Badge variant="outline" className="text-xs min-w-[32px] justify-center">
                       {startIndex + index + 1}
                     </Badge>
-                    <div className="text-sm font-medium leading-relaxed flex-1">{question}</div>
+                    <div className={`text-sm font-medium leading-relaxed flex-1 ${theme === "dark" ? "text-white" : "text-gray-800"}`}>{question}</div>
                   </div>
-                  <div className="pl-10 text-sm text-gray-600 leading-relaxed border-l-2 border-blue-100">{answer}</div>
+                  <div className={`pl-10 text-sm leading-relaxed border-l-2 border-blue-100 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>{answer}</div>
                 </div>
               </CardContent>
             </Card>
@@ -1257,7 +1257,7 @@ function GiftsPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-medium text-sm">{gift.name}</h3>
+                        <h3 className={`font-medium text-sm ${theme === "dark" ? "text-white" : "text-gray-800"}`}>{gift.name}</h3>
                         {gift.isLimited && (
                           <Badge variant="destructive" className="text-xs">
                             限定
@@ -1279,7 +1279,7 @@ function GiftsPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
                       )}
                     </Button>
                   </div>
-                  <div className="text-xs text-gray-700 bg-gray-50 p-2 rounded whitespace-pre-wrap">{gift.contents}</div>
+                  <div className={`text-xs p-2 rounded whitespace-pre-wrap ${theme === "dark" ? "text-gray-300 bg-gray-800" : "text-gray-700 bg-gray-50"}`}>{gift.contents}</div>
                 </div>
               </CardContent>
             </Card>
@@ -1304,7 +1304,7 @@ function GiftsPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
 export default function MengjianghuAssistant() {
   const [activeTab, setActiveTab] = useState("commands")
   const [currentQuote, setCurrentQuote] = useState(inspirationalQuotes[0])
-  const [theme, setTheme] = useState<"light" | "dark">("dark")
+  const [theme, setTheme] = useState<"light" | "dark">("light")
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * inspirationalQuotes.length)
