@@ -558,7 +558,7 @@ function DreamlandPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
               <label className={`${theme === "dark" ? "text-sm font-medium text-white" : "text-sm font-medium text-gray-800"}`}>起点</label>
               <Popover open={openStart} onOpenChange={setOpenStart}>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className={`${theme === "dark" ? "w-full justify-between bg-transparent" : "w-full justify-between bg-transparent"}`}>
+                  <Button variant="outline" className={`w-full justify-between ${theme === "dark" ? "bg-transparent text-white border-gray-600" : "bg-transparent"}`}>
                     {startLocation || "选择起点..."}
                   </Button>
                 </PopoverTrigger>
@@ -591,7 +591,7 @@ function DreamlandPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
               <label className={`${theme === "dark" ? "text-sm font-medium text-white" : "text-sm font-medium text-gray-800"}`}>终点</label>
               <Popover open={openEnd} onOpenChange={setOpenEnd}>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className={`${theme === "dark" ? "w-full justify-between bg-transparent" : "w-full justify-between bg-transparent"}`}>
+                  <Button variant="outline" className={`w-full justify-between ${theme === "dark" ? "bg-transparent text-white border-gray-600" : "bg-transparent"}`}>
                     {endLocation || "选择终点..."}
                   </Button>
                 </PopoverTrigger>
@@ -638,11 +638,11 @@ function DreamlandPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
                     <div key={index} className="flex items-center gap-2">
                       <Badge
                         variant={index === 0 ? "default" : index === path.length - 1 ? "destructive" : "secondary"}
-                        className="text-xs min-w-[24px] justify-center"
+                        className={`text-xs min-w-[24px] justify-center ${theme === "dark" && index !== 0 && index !== path.length - 1 ? "text-white" : ""}`}
                       >
                         {index + 1}
                       </Badge>
-                      <span className="text-sm">{location}</span>
+                      <span className={`text-sm ${theme === "dark" ? "text-white" : ""}`}>{location}</span>
                     </div>
                   ))}
                 </div>
@@ -748,16 +748,16 @@ function QuestionsPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
           <CardContent className="pt-6">
             <div className="flex justify-between items-center">
               <div className="text-center">
-                <div className="text-xl font-bold text-blue-600">{filteredQuestions.length}</div>
-                <div className="text-xs text-gray-600">{searchTerm ? "搜索结果" : "题目总数"}</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl font-bold text-green-600">{currentPage}</div>
-                <div className="text-xs text-gray-600">当前页</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl font-bold text-purple-600">{totalPages}</div>
-                <div className="text-xs text-gray-600">总页数</div>
+                              <div className="text-xl font-bold text-blue-600">{filteredQuestions.length}</div>
+              <div className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>{searchTerm ? "搜索结果" : "题目总数"}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-xl font-bold text-green-600">{currentPage}</div>
+              <div className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>当前页</div>
+            </div>
+            <div className="text-center">
+              <div className="text-xl font-bold text-purple-600">{totalPages}</div>
+              <div className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>总页数</div>
               </div>
             </div>
           </CardContent>
@@ -769,7 +769,7 @@ function QuestionsPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
               <CardContent className="pt-4">
                 <div className="space-y-3">
                   <div className="flex items-start gap-2">
-                    <Badge variant="outline" className="text-xs min-w-[32px] justify-center">
+                    <Badge variant="outline" className={`text-xs min-w-[32px] justify-center ${theme === "dark" ? "text-white bg-gray-700" : ""}`}>
                       {startIndex + index + 1}
                     </Badge>
                     <div className={`text-sm font-medium leading-relaxed flex-1 ${theme === "dark" ? "text-white" : "text-gray-800"}`}>{question}</div>
@@ -917,14 +917,14 @@ function CommonPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
               <CardContent>
                 <div className="space-y-2">
                   {tables.breakthrough.map((item, index) => (
-                    <div key={index} className="border rounded-lg p-3 bg-gray-50">
+                    <div key={index} className={`border rounded-lg p-3 ${theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-gray-50"}`}>
                       <div className="flex justify-between items-start mb-1">
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className={`text-xs ${theme === "dark" ? "text-white bg-gray-700" : ""}`}>
                           {item.stage}
                         </Badge>
-                        <span className="text-xs text-gray-600">{item.requirement}</span>
+                        <span className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>{item.requirement}</span>
                       </div>
-                      <div className="text-xs text-gray-700">{item.materials}</div>
+                      <div className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>{item.materials}</div>
                     </div>
                   ))}
                 </div>
@@ -936,21 +936,21 @@ function CommonPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
             <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
               <CardHeader>
                 <CardTitle className={`${theme === "dark" ? "text-white" : "text-gray-800"} text-sm`}>转世要求表</CardTitle>
-                <p className="text-xs text-gray-600">
+                <p className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
                   注意：宗武+50等级，武修+20等级要求。转世后宗武全无，特殊技能、基础技能会掉等级273，武修等级也会掉。
                 </p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   {tables.reincarnation.map((item, index) => (
-                    <div key={index} className="border rounded-lg p-3 bg-gray-50">
+                    <div key={index} className={`border rounded-lg p-3 ${theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-gray-50"}`}>
                       <div className="flex justify-between items-center mb-2">
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className={`text-xs ${theme === "dark" ? "text-white bg-gray-700" : ""}`}>
                           {item.turn}
                         </Badge>
-                        <span className="text-xs font-medium text-blue-600">{item.experience}</span>
+                        <span className={`text-xs font-medium ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}>{item.experience}</span>
                       </div>
-                      <div className="grid grid-cols-3 gap-2 text-xs text-gray-600">
+                      <div className={`grid grid-cols-3 gap-2 text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
                         <div>宗武: {item.sectLevel}</div>
                         <div>武修: {item.martialLevel}</div>
                         <div>灵慧: {item.wisdom}</div>
@@ -970,12 +970,12 @@ function CommonPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
               <CardContent>
                 <div className="space-y-2">
                   {tables.supremeShatter.map((item, index) => (
-                    <div key={index} className="border rounded-lg p-3 bg-gray-50">
+                    <div key={index} className={`border rounded-lg p-3 ${theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-gray-50"}`}>
                       <div className="flex justify-between items-center">
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className={`text-xs ${theme === "dark" ? "text-white bg-gray-700" : ""}`}>
                           {item.name}
                         </Badge>
-                        <div className="text-xs text-gray-600">
+                        <div className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
                           先天: {item.innate} | 阴阳十二天: {item.yinyang}
                         </div>
                       </div>
@@ -1167,13 +1167,13 @@ function GiftsPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
         <Card className={`${theme === "dark" ? "bg-black/30 backdrop-blur-md border-white/10 shadow-lg" : "bg-white border-gray-200 shadow"}`}>
           <CardContent className="pt-6">
             <div className="flex items-start gap-2">
-              <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-gray-600">
+              <Info className={`w-4 h-4 ${theme === "dark" ? "text-blue-400" : "text-blue-600"} mt-0.5 flex-shrink-0`} />
+              <div className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
                 <p className="mb-1">截止三周年，所有礼包限购次数 × 4</p>
                 <p>满月礼包分为两种：</p>
                 <ul className="list-disc list-inside pl-4 space-y-1">
-                  <li>满月限定礼包（每个价位都有）</li>
-                  <li>满月系列礼包（188赞助，按月份区分）</li>
+                  <li>满月限定（每个价位都有）</li>
+                  <li>满月系列（188赞助，按月份区分）</li>
                 </ul>
               </div>
             </div>
@@ -1232,17 +1232,17 @@ function GiftsPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
             <div className="flex justify-between items-center">
               <div className="text-center">
                 <div className="text-xl font-bold text-blue-600">{filteredGifts.length}</div>
-                <div className="text-xs text-gray-600">礼包总数</div>
+                <div className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>礼包总数</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-bold text-red-600">
                   {filteredGifts.filter((g) => g.isLimited).length}
                 </div>
-                <div className="text-xs text-gray-600">限定礼包</div>
+                <div className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>限定礼包</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-bold text-green-600">{favorites.length}</div>
-                <div className="text-xs text-gray-600">收藏数量</div>
+                <div className={`text-xs ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>收藏数量</div>
               </div>
             </div>
           </CardContent>
@@ -1263,11 +1263,11 @@ function GiftsPage({ theme = "dark" }: { theme?: "light" | "dark" }) {
                             限定
                           </Badge>
                         )}
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className={`text-xs ${theme === "dark" ? "text-white bg-gray-700" : ""}`}>
                           {gift.price}赞助
                         </Badge>
                       </div>
-                      <div className="text-xs text-gray-600 mb-2">
+                      <div className={`text-xs mb-2 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
                         {gift.category} • 限购{gift.purchaseLimit}次 (×4)
                       </div>
                     </div>
@@ -1306,13 +1306,23 @@ export default function MengjianghuAssistant() {
   const [currentQuote, setCurrentQuote] = useState(inspirationalQuotes[0])
   const [theme, setTheme] = useState<"light" | "dark">("light")
 
+  // 加载并设置存储的主题偏好
   useEffect(() => {
+    const savedTheme = localStorage.getItem("theme-preference")
+    if (savedTheme === "dark" || savedTheme === "light") {
+      setTheme(savedTheme)
+    }
+    
     const randomIndex = Math.floor(Math.random() * inspirationalQuotes.length)
     setCurrentQuote(inspirationalQuotes[randomIndex])
   }, [])
 
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === "light" ? "dark" : "light")
+    setTheme(prevTheme => {
+      const newTheme = prevTheme === "light" ? "dark" : "light"
+      localStorage.setItem("theme-preference", newTheme)
+      return newTheme
+    })
   }
 
   const renderContent = () => {
