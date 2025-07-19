@@ -48,14 +48,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 // 名人名言数据
 const inspirationalQuotes = [
-  "山重水复疑无路，柳暗花明又一村。",
-  "宝剑锋从磨砺出，梅花香自苦寒来。",
-  "千磨万击还坚劲，任尔东西南北风。",
-  "路漫漫其修远兮，吾将上下而求索。",
-  "天行健，君子以自强不息。",
-  "不经一番寒彻骨，怎得梅花扑鼻香。",
+  "天行健，君子以自强不息；地势坤，君子以厚德载物。",
+  "不鸣则已，一鸣惊人；不飞则已，一飞冲天。",
   "长风破浪会有时，直挂云帆济沧海。",
+  "宝剑锋从磨砺出，梅花香自苦寒来。",
   "会当凌绝顶，一览众山小。",
+  "千磨万击还坚劲，任尔东西南北风。",
+  "天生我材必有用，千金散尽还复来。",
+  "古之立大事者，不惟有超世之才，亦必有坚忍不拔之志。",
+  "志不强者智不达，言不信者行不果。",
+  "路漫漫其修远兮，吾将上下而求索。",
+  "不经一番寒彻骨，怎得梅花扑鼻香。",
+  "一日不练，自己知道；两日不练，教练知道；三日不练，观众知道。",
+  "业精于勤，荒于嬉；行成于思，毁于随。",
+  "玉不琢，不成器；人不学，不知道。",
+  "苦海无边，回头是岸；放下屠刀，立地成佛。",
+  "欲穷千里目，更上一层楼。"
 ]
 
 // 移除预设的指令数据
@@ -79,7 +87,7 @@ function BottomNavigation({ activeTab, setActiveTab }: { activeTab: string; setA
   ]
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-2 z-50">
+    <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+10px)] left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-2 z-50 rounded-xl mx-4 shadow-lg">
       <div className="flex justify-around max-w-md mx-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon
@@ -201,7 +209,7 @@ function CommandsPage() {
 
   return (
     <div className="p-4">
-      <div className="max-w-md mx-auto space-y-4 pb-24">
+      <div className="max-w-md mx-auto space-y-4 pb-28">
         {/* 提示信息 */}
         <Card>
           <CardContent className="pt-6">
@@ -501,7 +509,7 @@ function DreamlandPage() {
 
   return (
     <div className="p-4">
-      <div className="max-w-md mx-auto space-y-4 pb-24">
+      <div className="max-w-md mx-auto space-y-4 pb-28">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -693,7 +701,7 @@ function QuestionsPage() {
   if (loading) {
     return (
       <div className="p-4">
-        <div className="max-w-md mx-auto pb-24">
+        <div className="max-w-md mx-auto pb-28">
           <Card>
             <CardContent className="pt-6 text-center">
               <div className="animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-2"></div>
@@ -707,7 +715,7 @@ function QuestionsPage() {
 
   return (
     <div className="p-4">
-      <div className="max-w-md mx-auto space-y-4 pb-24">
+      <div className="max-w-md mx-auto space-y-4 pb-28">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
@@ -875,7 +883,7 @@ function CommonPage() {
 
   return (
     <div className="p-4">
-      <div className="max-w-md mx-auto space-y-4 pb-24">
+      <div className="max-w-md mx-auto space-y-4 pb-28">
         <Tabs defaultValue="breakthrough" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="breakthrough">挣脱要求</TabsTrigger>
@@ -1111,7 +1119,7 @@ function GiftsPage() {
   if (loading) {
     return (
       <div className="p-4">
-        <div className="max-w-md mx-auto pb-24">
+        <div className="max-w-md mx-auto pb-28">
           <Card>
             <CardContent className="pt-6 text-center">
               <div className="animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-2"></div>
@@ -1125,7 +1133,7 @@ function GiftsPage() {
 
   return (
     <div className="p-4">
-      <div className="max-w-md mx-auto space-y-4 pb-24">
+      <div className="max-w-md mx-auto space-y-4 pb-28">
         {/* 搜索框 */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
